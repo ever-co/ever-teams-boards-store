@@ -1,8 +1,8 @@
-> this repo replaces a previous implementation in https://github.com/excalidraw/excalidraw-json
+# Ever Teams Boards JSON Server
 
-# Excalidraw Store
+This repo is a modified fork of <https://github.com/excalidraw/excalidraw-store> (Copyright (c) 2021 Excalidraw, [MIT license](https://github.com/excalidraw/excalidraw-store/blob/main/LICENSE))
 
-The server that stores all the encrypted sharable drawings from [Excalidraw](https://excalidraw.com) on Google Storage.
+The server that stores all the encrypted sharable drawings on Google Storage.
 
 ## Development
 
