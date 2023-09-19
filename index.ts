@@ -5,12 +5,17 @@ import { nanoid } from "nanoid";
 import favicon from "serve-favicon";
 import * as path from "path";
 
-const PROJECT_NAME = process.env.GOOGLE_CLOUD_PROJECT || "excalidraw-json-dev";
-const PROD = PROJECT_NAME === "excalidraw-json";
+require("dotenv").config({ path: ".env" });
+require("dotenv").config({
+  override: true,
+  path: ".env.local",
+});
+
 const LOCAL = process.env.NODE_ENV !== "production";
-const BUCKET_NAME = PROD
-  ? "excalidraw-json.appspot.com"
-  : "excalidraw-json-dev.appspot.com";
+
+const CORS_ORIGINS = process.env.CORS_ORIGINS || "";
+const PROJECT_NAME = process.env.GOOGLE_CLOUD_PROJECT;
+const BUCKET_NAME = process.env.GOOGLE_STORAGE_BUCKET_NAME || "";
 
 const FILE_SIZE_LIMIT = 2 * 1024 * 1024;
 const storage = new Storage(
@@ -25,14 +30,9 @@ const storage = new Storage(
 const bucket = storage.bucket(BUCKET_NAME);
 const app = express();
 
-let allowOrigins = [
-  "excalidraw.vercel.app",
-  "https://dai-shi.github.io",
-  "https://excalidraw.com",
-  "https://www.excalidraw.com",
-  "https://math.preview.excalidraw.com",
-];
-if (!PROD) {
+let allowOrigins = CORS_ORIGINS.split(",").map((o) => o.trim());
+
+if (LOCAL) {
   allowOrigins.push("http://localhost:");
 }
 
