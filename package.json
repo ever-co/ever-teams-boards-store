@@ -1,7 +1,7 @@
 {
-  "name": "excalidraw-store",
+  "name": "ever-teams-boards-store",
   "version": "1.0.0",
-  "repository": "git@github.com:excalidraw/excalidraw-store.git",
+  "repository": "git@github.com:ever-co/ever-teams-boards-store.git",
   "author": "Panayiotis Lipiridis <lipiridis@gmail.com>",
   "license": "MIT",
   "private": true,
@@ -31,8 +31,7 @@
   },
   "scripts": {
     "build": "node esbuild.js",
-    "deploy": "yarn build && gcloud app deploy --project excalidraw-json -q",
-    "deploy:dev": "yarn build && gcloud app deploy --project excalidraw-json-dev -q",
+    "deploy": "yarn build && gcloud app deploy --project ever-teams-boards-store -q",    
     "dev": "ts-node-dev index.ts",
     "fix": "yarn prettier --write",
     "prepare": "husky install",

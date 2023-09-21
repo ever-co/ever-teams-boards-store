@@ -27,7 +27,7 @@ yarn test
 Example endpoint URL
 
 ```
-https://json.excalidraw.com/api/v2/post/
+https://jsonboard.ever.team/api/v2/post/
 ```
 
 #### Binary payload
@@ -43,7 +43,7 @@ Example of `binary` payload
 ```
 {
   "id": "5633286537740288",
-  "data": "https://json.excalidraw.com/api/v2/5633286537740288"
+  "data": "https://jsonboard.ever.team/api/v2/5633286537740288"
 }
 ```
 
@@ -52,7 +52,7 @@ Example of `binary` payload
 Example endpoint URL
 
 ```
-https://json.excalidraw.com/api/v2/5633286537740288
+https://jsonboard.ever.team/api/v2/5633286537740288
 ```
 
 #### Response
@@ -68,5 +68,5 @@ Example of binary response. If the id is found it will return the data. Otherwis
 ### Check how many files are on Google Storage
 
 ```
-gsutil du gs://excalidraw-json.appspot.com | wc -l
+gsutil du gs://ever-teams-boards-store.appspot.com | wc -l
 ```
