@@ -32,10 +32,6 @@ const app = express();
 
 let allowOrigins = CORS_ORIGINS.split(",").map((o) => o.trim());
 
-if (LOCAL) {
-  allowOrigins.push("http://localhost:");
-}
-
 const corsGet = cors();
 const corsPost = cors((req, callback) => {
   const origin = req.headers.origin;
