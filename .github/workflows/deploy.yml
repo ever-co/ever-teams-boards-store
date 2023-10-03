@@ -37,9 +37,9 @@ jobs:
           sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
           mv app.template.yaml app.yaml
 
-      # - name: Temporary Print app.yaml Content
-      #  run: |
-      #    cat app.yaml
+      - name: Temporary Print app.yaml Content
+        run: |
+          cat app.yaml
 
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
