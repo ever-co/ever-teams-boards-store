@@ -37,8 +37,8 @@ jobs:
 
       - name: Replace placeholders with secrets
         run: |
-          sed -i 's|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ secrets.GOOGLE_CREDENTIALS }}|g' app.template.yaml
-          mv app.template.yaml app.yaml
+          ESCAPED_GOOGLE_CREDENTIALS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | jq -c -a -R .)
+          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|$ESCAPED_GOOGLE_CREDENTIALS|g" app.template.yaml
 
       - name: "Deploy to GCP AppEngine"
         run: |
