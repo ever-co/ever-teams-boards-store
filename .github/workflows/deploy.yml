@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   deploy:
@@ -23,10 +24,18 @@ jobs:
           yarn test
           yarn build
 
-      - name: Deploy to App Engine
-        uses: google-github-actions/deploy-appengine@v0.4.0
+      - name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
         with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+
+      # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v1"
+
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          project_id: ever-teams-399720
           deliverables: app.yaml
-          project_id: ever-teams-boards-store
-          credentials: ${{secrets.GCP_SA_KEY}}
           promote: true
