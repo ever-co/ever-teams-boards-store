@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js 14.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
 
@@ -23,10 +23,40 @@ jobs:
           yarn test
           yarn build
 
-      - name: Deploy to App Engine
-        uses: google-github-actions/deploy-appengine@v0.4.0
+      - name: Decode Google Credentials
+        run: |
+          DECODED_GOOGLE_CREDENTIALS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 --decode)
+          echo "DECODED_GOOGLE_CREDENTIALS=$DECODED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV          
+          echo "::add-mask::$DECODED_GOOGLE_CREDENTIALS"
+          ESCAPED_GOOGLE_CREDENTIALS=$(echo "$DECODED_GOOGLE_CREDENTIALS" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+          ESCAPED_GOOGLE_CREDENTIALS=$(echo $ESCAPED_GOOGLE_CREDENTIALS | sed 's/\\n/\\\\n/g')
+          echo "ESCAPED_GOOGLE_CREDENTIALS=$ESCAPED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
+          echo "::add-mask::$ESCAPED_GOOGLE_CREDENTIALS"
+
+      - name: Replace placeholders with secrets
+        run: |
+          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
+          mv app.template.yaml app.yaml
+
+      - name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
         with:
-          deliverables: app.yaml
-          project_id: ever-teams-boards-store
-          credentials: ${{secrets.GCP_SA_KEY}}
-          promote: true
+          credentials_json: ${{ env.DECODED_GOOGLE_CREDENTIALS }}
+
+      # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v1"
+        with:
+          project_id: "ever-teams-399720"
+
+      - name: "Deploy to GCP AppEngine"
+        run: |
+          yarn deploy
+
+      # Deploy to App Engine (another way)
+      # - name: Deploy to App Engine
+      # uses: google-github-actions/deploy-appengine@v1
+      #  with:
+      #    project_id: ever-teams-399720
+      #    deliverables: app.yaml
+      #    promote: true

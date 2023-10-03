@@ -17,12 +17,18 @@ const CORS_ORIGINS = process.env.CORS_ORIGINS || "";
 const PROJECT_NAME = process.env.GOOGLE_CLOUD_PROJECT;
 const BUCKET_NAME = process.env.GOOGLE_STORAGE_BUCKET_NAME || "";
 
+if (!process.env.GOOGLE_CREDENTIALS)
+  throw new Error("GOOGLE_CREDENTIALS is not set.");
+
+const GOOGLE_CREDENTIALS = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+
 const FILE_SIZE_LIMIT = 2 * 1024 * 1024;
+
 const storage = new Storage(
   LOCAL
     ? {
         projectId: PROJECT_NAME,
-        keyFilename: `${__dirname}/keys/${PROJECT_NAME}.json`,
+        credentials: GOOGLE_CREDENTIALS,
       }
     : undefined
 );

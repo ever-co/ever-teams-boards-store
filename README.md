@@ -68,5 +68,5 @@ Example of binary response. If the id is found it will return the data. Otherwis
 ### Check how many files are on Google Storage
 
 ```
-gsutil du gs://ever-teams-boards-store.appspot.com | wc -l
+gsutil du gs://ever-teams-399720.appspot.com | wc -l
 ```

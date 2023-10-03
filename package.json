@@ -10,7 +10,7 @@
     "@types/express": "4.17.13",
     "@types/serve-favicon": "2.5.3",
     "esbuild": "0.14.9",
-    "husky": "^7.0.4",
+    "husky": "^8.0.3",
     "lint-staged": "^12.1.2",
     "prettier": "2.5.1",
     "ts-node-dev": "1.1.8",
@@ -31,10 +31,11 @@
   },
   "scripts": {
     "build": "node esbuild.js",
-    "deploy": "yarn build && gcloud app deploy --project ever-teams-boards-store -q",    
+    "build:deploy": "yarn build && yarn deploy",
+    "deploy": "gcloud app deploy --project ever-teams-399720 -q",
     "dev": "ts-node-dev index.ts",
     "fix": "yarn prettier --write",
-    "prepare": "husky install",
+    "prepare": "npx husky install .husky",
     "prettier": "prettier \"**/*.{ts,js,json,md,html,yml}\" --ignore-path=.gitignore",
     "start": "node index.js",
     "test": "yarn prettier --list-different"
