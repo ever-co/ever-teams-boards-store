@@ -24,10 +24,17 @@ jobs:
           yarn test
           yarn build
 
+      - name: Decode Google Credentials
+        run: |
+          DECODED_GOOGLE_CREDENTIALS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 --decode)
+          echo "DECODED_GOOGLE_CREDENTIALS=$DECODED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
+          ESCAPED_GOOGLE_CREDENTIALS=$(echo "$DECODED_GOOGLE_CREDENTIALS" | sed 's/"/\\"/g')
+          echo "ESCAPED_GOOGLE_CREDENTIALS=$ESCAPED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
+
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+          credentials_json: ${{ env.DECODED_GOOGLE_CREDENTIALS }}
 
       # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
       - name: "Set up Cloud SDK"
@@ -37,8 +44,7 @@ jobs:
 
       - name: Replace placeholders with secrets
         run: |
-          ESCAPED_GOOGLE_CREDENTIALS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | jq -c -a -R .)
-          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|$ESCAPED_GOOGLE_CREDENTIALS|g" app.template.yaml
+          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
           mv app.template.yaml app.yaml
 
       - name: "Deploy to GCP AppEngine"
