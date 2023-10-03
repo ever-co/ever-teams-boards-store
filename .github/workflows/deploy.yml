@@ -27,8 +27,8 @@ jobs:
       - name: Decode Google Credentials
         run: |
           DECODED_GOOGLE_CREDENTIALS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 --decode)
-          echo "DECODED_GOOGLE_CREDENTIALS=$DECODED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
-          ESCAPED_GOOGLE_CREDENTIALS=$(echo "$DECODED_GOOGLE_CREDENTIALS" | sed 's/"/\\"/g')
+          echo "DECODED_GOOGLE_CREDENTIALS=$DECODED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV          
+          ESCAPED_GOOGLE_CREDENTIALS=$(echo "$DECODED_GOOGLE_CREDENTIALS" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
           echo "ESCAPED_GOOGLE_CREDENTIALS=$ESCAPED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
 
       - name: Replace placeholders with secrets
@@ -36,9 +36,9 @@ jobs:
           sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
           mv app.template.yaml app.yaml
 
-      - name: Temporary Print app.yaml Content
-        run: |
-          cat app.yaml
+      # - name: Temporary Print app.yaml Content
+      #  run: |
+      #    cat app.yaml
 
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
