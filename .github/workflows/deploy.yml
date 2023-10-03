@@ -31,6 +31,15 @@ jobs:
           ESCAPED_GOOGLE_CREDENTIALS=$(echo "$DECODED_GOOGLE_CREDENTIALS" | sed 's/"/\\"/g')
           echo "ESCAPED_GOOGLE_CREDENTIALS=$ESCAPED_GOOGLE_CREDENTIALS" >> $GITHUB_ENV
 
+      - name: Replace placeholders with secrets
+        run: |
+          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
+          mv app.template.yaml app.yaml
+
+      - name: Temporary Print app.yaml Content
+        run: |
+          cat app.yaml
+
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
@@ -41,15 +50,6 @@ jobs:
         uses: "google-github-actions/setup-gcloud@v1"
         with:
           project_id: "ever-teams-399720"
-
-      - name: Replace placeholders with secrets
-        run: |
-          sed -i "s|PLACEHOLDER_GOOGLE_CREDENTIALS|${{ env.ESCAPED_GOOGLE_CREDENTIALS }}|g" app.template.yaml
-          mv app.template.yaml app.yaml
-
-      - name: Temporary Print app.yaml Content
-        run: |
-          cat app.yaml
 
       - name: "Deploy to GCP AppEngine"
         run: |
