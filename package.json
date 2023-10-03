@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "node esbuild.js",
-    "build:deploy": "yarn build && gcloud app deploy --project ever-teams-399720 -q",
+    "build:deploy": "yarn build && yarn deploy",
     "deploy": "gcloud app deploy --project ever-teams-399720 -q",
     "dev": "ts-node-dev index.ts",
     "fix": "yarn prettier --write",
