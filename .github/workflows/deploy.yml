@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js 14.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
 
@@ -33,9 +33,14 @@ jobs:
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v1"
 
-      - name: Deploy to App Engine
-        uses: google-github-actions/deploy-appengine@v1
-        with:
-          project_id: ever-teams-399720
-          deliverables: app.yaml
-          promote: true
+      - name: "Deploy to GCP AppEngine"
+        run: |
+          yarn deploy
+
+      # Deploy to App Engine (another way)
+      # - name: Deploy to App Engine
+      # uses: google-github-actions/deploy-appengine@v1
+      #  with:
+      #    project_id: ever-teams-399720
+      #    deliverables: app.yaml
+      #    promote: true

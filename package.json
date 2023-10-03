@@ -31,7 +31,8 @@
   },
   "scripts": {
     "build": "node esbuild.js",
-    "deploy": "yarn build && gcloud app deploy --project ever-teams-boards-store -q",
+    "build:deploy": "yarn build && gcloud app deploy --project ever-teams-399720 -q",
+    "deploy": "gcloud app deploy --project ever-teams-399720 -q",
     "dev": "ts-node-dev index.ts",
     "fix": "yarn prettier --write",
     "prepare": "npx husky install .husky",
