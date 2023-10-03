@@ -4,5 +4,5 @@ env_variables:
   NODE_ENV: production
   GOOGLE_CREDENTIALS: 'PLACEHOLDER_GOOGLE_CREDENTIALS'
   GOOGLE_CLOUD_PROJECT: ever-teams-399720
-  GOOGLE_STORAGE_BUCKET_NAME: ever-teams-boards-399720.appspot.com
+  GOOGLE_STORAGE_BUCKET_NAME: ever-teams-boards
   CORS_ORIGINS: "app.ever.team,board.ever.team"
